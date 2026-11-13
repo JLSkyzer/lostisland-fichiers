@@ -1,0 +1,80 @@
+{
+  "name": "lostisland-fichiers",
+  "productName": "Lost Island Fichiers",
+  "version": "0.1.0",
+  "description": "Logiciel de transfert des fichiers du jeu du serveur Lost Island RP",
+  "main": "src/main/main.js",
+  "author": "Lost Island RP",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "essai": "node test/essai.js",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "fr.lostisland.fichiers",
+    "productName": "Lost Island Fichiers",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "JLSkyzer",
+        "repo": "lostisland-fichiers",
+        "releaseType": "release"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "LostIslandFichiers-Setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "Lost Island Fichiers"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "universal"
+          ]
+        }
+      ],
+      "category": "public.app-category.utilities",
+      "artifactName": "LostIslandFichiers-mac.${ext}",
+      "identity": "-"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Utility",
+      "artifactName": "LostIslandFichiers.${ext}"
+    }
+  },
+  "devDependencies": {
+    "electron": "^45.3.2",
+    "electron-builder": "^26.18.0"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11",
+    "js-yaml": "^4.3.2"
+  }
+}

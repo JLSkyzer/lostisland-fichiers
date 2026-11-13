@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'none'; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Lost Island Fichiers</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Icônes, dessinées pour ce logiciel (traits de 1,6 sur une grille de 20) -->
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-dossier" viewBox="0 0 20 20"><path d="M2.5 5.5v9.5h15v-8h-7.2L8.6 4.5H3.5z"/></symbol>
+  <symbol id="i-fichier" viewBox="0 0 20 20"><path d="M5 2.5h6.5l3.5 3.5v11.5H5z M11.5 2.5V6H15"/></symbol>
+  <symbol id="i-jar" viewBox="0 0 20 20"><path d="M5 2.5h6.5l3.5 3.5v11.5H5z M11.5 2.5V6H15 M8 10h4M8 13h4"/></symbol>
+  <symbol id="i-parent" viewBox="0 0 20 20"><path d="M10 16V5M5 9.5 10 4.5l5 5"/></symbol>
+  <symbol id="i-actualiser" viewBox="0 0 20 20"><path d="M16 10a6 6 0 1 1-1.8-4.3M16 3.5v3.5h-3.5"/></symbol>
+  <symbol id="i-nouveau-dossier" viewBox="0 0 20 20"><path d="M2.5 5.5v9.5h15v-8h-7.2L8.6 4.5H3.5z M10 8.8v4.4M7.8 11h4.4"/></symbol>
+  <symbol id="i-choisir" viewBox="0 0 20 20"><path d="M2.5 15V5.5h6l1.8 2h7.2v1.5 M2.5 15l2.5-6h13l-2.5 6z"/></symbol>
+  <symbol id="i-explorateur" viewBox="0 0 20 20"><path d="M11 3.5h5.5V9 M16.5 3.5 9.5 10.5 M14 12v4.5H3.5V6H8"/></symbol>
+  <symbol id="i-renommer" viewBox="0 0 20 20"><path d="M3.5 16.5h3l9-9-3-3-9 9z M11 6l3 3"/></symbol>
+  <symbol id="i-supprimer" viewBox="0 0 20 20"><path d="M3.5 5.5h13 M8 5.5V3.5h4v2 M5 5.5l.8 11h8.4l.8-11 M8.5 8.5v5M11.5 8.5v5"/></symbol>
+  <symbol id="i-envoyer" viewBox="0 0 20 20"><path d="M3.5 10h12M11 5.5l4.5 4.5-4.5 4.5"/></symbol>
+  <symbol id="i-telecharger" viewBox="0 0 20 20"><path d="M16.5 10h-12M9 5.5 4.5 10 9 14.5"/></symbol>
+  <symbol id="i-sync" viewBox="0 0 20 20"><path d="M3.5 7.5h12l-3-3 M16.5 12.5h-12l3 3"/></symbol>
+  <symbol id="i-pc" viewBox="0 0 20 20"><path d="M2.5 4h15v9.5h-15z M7 16.5h6 M10 13.5v3"/></symbol>
+  <symbol id="i-serveur" viewBox="0 0 20 20"><path d="M3 3.5h14v5H3z M3 11.5h14v5H3z M6 6h.01M6 14h.01"/></symbol>
+  <symbol id="i-fermer" viewBox="0 0 20 20"><path d="M5 5l10 10M15 5 5 15"/></symbol>
+  <symbol id="i-info" viewBox="0 0 20 20"><path d="M10 17.5a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z M10 9v5 M10 6.2v.1"/></symbol>
+  <symbol id="i-compte" viewBox="0 0 20 20"><path d="M10 10a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4z M3.8 16.5c.8-3 3.3-4.5 6.2-4.5s5.4 1.5 6.2 4.5"/></symbol>
+  <symbol id="i-oeil" viewBox="0 0 20 20"><path d="M1.8 10S4.8 4.5 10 4.5 18.2 10 18.2 10 15.2 15.5 10 15.5 1.8 10 1.8 10z M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/></symbol>
+  <symbol id="i-sortie" viewBox="0 0 20 20"><path d="M8 3.5H3.5v13H8 M13 6.5l3.5 3.5-3.5 3.5 M16.5 10h-9"/></symbol>
+</svg>
+
+<!-- Connexion -->
+<section id="ecran-connexion" class="connexion" hidden>
+  <div class="connexion-carte">
+    <div class="connexion-marque">
+      <img src="assets/icone.png" alt="" width="64" height="64">
+      <h1>Lost Island <span>Fichiers</span></h1>
+      <p>Les fichiers du jeu distribués aux joueurs par le launcher : mods, configs, mods optionnels.</p>
+      <ul>
+        <li>Fichiers de plus de 90 Mo découpés en morceaux, sans limite de Cloudflare</li>
+        <li>Envois interrompus repris là où ils s'étaient arrêtés</li>
+        <li>Synchronisation d'un dossier, avec aperçu avant d'agir</li>
+      </ul>
+    </div>
+    <form id="form-connexion" novalidate>
+      <h2>Connexion</h2>
+      <p class="aide">Avec un <strong>compte d'accès</strong>, créé par l'administrateur du site dans <strong>Fichiers du jeu → Accès par logiciel</strong>. C'est le même compte que pour WinSCP.</p>
+      <label class="champ">
+        <span>Nom du compte</span>
+        <input id="c-nom" name="nom" autocomplete="username" spellcheck="false" autocapitalize="off">
+      </label>
+      <label class="champ">
+        <span>Mot de passe</span>
+        <span class="champ-mdp">
+          <input id="c-mdp" name="mdp" type="password" autocomplete="current-password">
+          <button type="button" id="c-voir" class="icone-seule" aria-label="Afficher le mot de passe" aria-pressed="false"><svg><use href="#i-oeil"/></svg></button>
+        </span>
+      </label>
+      <label class="case">
+        <input type="checkbox" id="c-souvenir">
+        <span>Se souvenir de moi</span>
+      </label>
+      <p class="note" id="c-note">Le mot de passe est chiffré par le système, jamais écrit en clair.</p>
+      <p id="c-erreur" class="erreur" role="alert" hidden></p>
+      <button class="btn principal large" id="c-valider" type="submit">Se connecter</button>
+    </form>
+  </div>
+  <p class="connexion-pied" id="c-pied"></p>
+</section>
+
+<!-- Écran principal -->
+<section id="ecran-principal" hidden>
+  <header class="barre">
+    <div class="marque"><img src="assets/icone.png" alt="" width="24" height="24"><span>Lost Island <b>Fichiers</b></span></div>
+    <span class="essai" id="badge-essai" hidden>Mode d'essai : serveur factice local</span>
+    <div class="barre-fin">
+      <button id="b-sync" class="btn" title="Synchroniser le dossier du PC ouvert vers le dossier du serveur ouvert"><svg><use href="#i-sync"/></svg>Synchroniser</button>
+      <span class="compte" title="Compte d'accès"><svg><use href="#i-compte"/></svg><span id="compte-nom"></span></span>
+      <button id="b-deconnexion" class="btn discret"><svg><use href="#i-sortie"/></svg>Déconnexion</button>
+    </div>
+  </header>
+
+  <main class="volets">
+    <section class="volet" id="volet-local" data-cote="local" aria-labelledby="titre-local">
+      <div class="volet-tete">
+        <h2 id="titre-local"><svg><use href="#i-pc"/></svg>Ce PC</h2>
+        <div class="outils" role="toolbar" aria-label="Outils du PC">
+          <button class="icone-seule" data-action="parent" title="Dossier parent (Retour arrière)" aria-label="Dossier parent"><svg><use href="#i-parent"/></svg></button>
+          <button class="icone-seule" data-action="actualiser" title="Actualiser (F5)" aria-label="Actualiser"><svg><use href="#i-actualiser"/></svg></button>
+          <button class="icone-seule" data-action="nouveau" title="Nouveau dossier (F7)" aria-label="Nouveau dossier"><svg><use href="#i-nouveau-dossier"/></svg></button>
+          <button class="icone-seule" data-action="choisir" title="Choisir un dossier…" aria-label="Choisir un dossier"><svg><use href="#i-choisir"/></svg></button>
+          <button class="icone-seule" data-action="explorateur" title="Ouvrir dans l'explorateur" aria-label="Ouvrir dans l'explorateur"><svg><use href="#i-explorateur"/></svg></button>
+          <span class="sep"></span>
+          <button class="btn principal petit" data-action="transferer" title="Envoyer la sélection dans le dossier du serveur ouvert (F6)">Envoyer<svg><use href="#i-envoyer"/></svg></button>
+        </div>
+      </div>
+      <nav class="ariane" aria-label="Emplacement sur le PC"></nav>
+      <div class="liste" tabindex="0" role="grid" aria-multiselectable="true" aria-label="Contenu du dossier du PC">
+        <table>
+          <thead><tr>
+            <th class="c-nom" data-tri="nom"><button>Nom</button></th>
+            <th class="c-taille" data-tri="taille"><button>Taille</button></th>
+            <th class="c-date" data-tri="modifie"><button>Modifié</button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+        <p class="liste-message" hidden></p>
+        <div class="depot" aria-hidden="true"><span><svg><use href="#i-telecharger"/></svg>Télécharger ici</span></div>
+      </div>
+      <footer class="volet-pied"><span class="compteur"></span></footer>
+    </section>
+
+    <section class="volet" id="volet-distant" data-cote="distant" aria-labelledby="titre-distant">
+      <div class="volet-tete">
+        <h2 id="titre-distant"><svg><use href="#i-serveur"/></svg>Serveur</h2>
+        <div class="outils" role="toolbar" aria-label="Outils du serveur">
+          <button class="btn principal petit" data-action="transferer" title="Télécharger la sélection dans le dossier du PC ouvert (F6)"><svg><use href="#i-telecharger"/></svg>Télécharger</button>
+          <span class="sep"></span>
+          <button class="icone-seule" data-action="parent" title="Dossier parent (Retour arrière)" aria-label="Dossier parent"><svg><use href="#i-parent"/></svg></button>
+          <button class="icone-seule" data-action="actualiser" title="Actualiser (F5)" aria-label="Actualiser"><svg><use href="#i-actualiser"/></svg></button>
+          <button class="icone-seule" data-action="nouveau" title="Nouveau dossier (F7)" aria-label="Nouveau dossier"><svg><use href="#i-nouveau-dossier"/></svg></button>
+          <button class="icone-seule" data-action="renommer" title="Renommer (F2)" aria-label="Renommer"><svg><use href="#i-renommer"/></svg></button>
+          <button class="icone-seule danger" data-action="supprimer" title="Supprimer (Suppr)" aria-label="Supprimer"><svg><use href="#i-supprimer"/></svg></button>
+        </div>
+      </div>
+      <nav class="ariane" aria-label="Emplacement sur le serveur"></nav>
+      <div class="liste" tabindex="0" role="grid" aria-multiselectable="true" aria-label="Contenu du dossier du serveur">
+        <table>
+          <thead><tr>
+            <th class="c-nom" data-tri="nom"><button>Nom</button></th>
+            <th class="c-taille" data-tri="taille"><button>Taille</button></th>
+            <th class="c-date" data-tri="modifie"><button>Modifié</button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+        <p class="liste-message" hidden></p>
+        <div class="depot" aria-hidden="true"><span><svg><use href="#i-envoyer"/></svg>Envoyer ici</span></div>
+      </div>
+      <footer class="volet-pied">
+        <span class="compteur"></span>
+        <span class="rappel" id="rappel"><svg><use href="#i-info"/></svg><span><b>optionalmod</b> contient les mods optionnels du launcher. Tout changement ici est reçu par les joueurs au prochain « Jouer ».</span></span>
+      </footer>
+    </section>
+  </main>
+
+  <section class="file" aria-labelledby="titre-file">
+    <header class="file-tete">
+      <h2 id="titre-file">Transferts</h2>
+      <span id="file-resume" class="file-resume"></span>
+      <button id="file-effacer" class="btn discret petit">Effacer les terminés</button>
+    </header>
+    <ol id="file-liste" class="file-liste"></ol>
+    <p id="file-vide" class="file-vide">Aucun transfert. Glissez des fichiers d'un volet à l'autre, ou depuis l'explorateur du système vers le serveur.</p>
+  </section>
+
+  <footer class="etat">
+    <span><kbd>Entrée</kbd> ouvrir · <kbd>Retour arrière</kbd> parent · <kbd>F5</kbd> actualiser · <kbd>F6</kbd> transférer · <kbd>F7</kbd> nouveau dossier · <kbd>F2</kbd> renommer · <kbd>Suppr</kbd> supprimer · <kbd>Tab</kbd> autre volet</span>
+    <span id="version"></span>
+  </footer>
+</section>
+
+<dialog id="dialogue" aria-labelledby="dialogue-titre">
+  <form method="dialog" class="dialogue">
+    <h2 id="dialogue-titre"></h2>
+    <div id="dialogue-corps" class="dialogue-corps"></div>
+    <div id="dialogue-actions" class="dialogue-actions"></div>
+  </form>
+</dialog>
+
+<div id="annonces" class="annonces" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
