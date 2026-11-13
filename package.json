@@ -1,7 +1,7 @@
 {
   "name": "lostisland-fichiers",
   "productName": "Lost Island Fichiers",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Logiciel de transfert des fichiers du jeu du serveur Lost Island RP",
   "main": "src/main/main.js",
   "author": "Lost Island RP",
