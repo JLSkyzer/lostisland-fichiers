@@ -652,15 +652,41 @@ async function transferer(source, elements, dossierCible = null) {
   if (!r.ok) annoncer(r.erreur, { erreur: true });
 }
 
+// Un dossier qui existe déjà de l'autre côté n'est pas remplacé : il est complété (fichiers nouveaux ajoutés,
+// fichiers de même nom remplacés, rien de supprimé). Seuls les fichiers de même nom sont remplacés.
 function confirmerRemplacement(doublons, ou) {
-  const dossiers = doublons.some((e) => e.dossier);
+  const dossiers = doublons.filter((e) => e.dossier);
+  const fichiers = doublons.filter((e) => !e.dossier);
+  const nomDossiers = dossiers.length === 1 ? `le dossier « ${dossiers[0].nom} »` : `${dossiers.length} dossiers`;
+  const nomFichiers = fichiers.length === 1 ? `« ${fichiers[0].nom} »` : `${fichiers.length} fichiers`;
+
+  let titre, oui;
+  if (!fichiers.length) {
+    titre = dossiers.length === 1 ? `Le dossier « ${dossiers[0].nom} » existe déjà ${ou}` : `${dossiers.length} dossiers existent déjà ${ou}`;
+    oui = dossiers.length === 1 ? "Ajouter au dossier" : "Ajouter aux dossiers";
+  } else if (!dossiers.length) {
+    titre = fichiers.length === 1 ? `« ${fichiers[0].nom} » existe déjà ${ou}` : `${fichiers.length} fichiers existent déjà ${ou}`;
+    oui = "Remplacer";
+  } else {
+    titre = `${doublons.length} éléments existent déjà ${ou}`;
+    oui = "Continuer";
+  }
+
+  const explications = [];
+  if (dossiers.length) {
+    explications.push(
+      el("p", {
+        texte: `Rien n'est remplacé en bloc : ${nomDossiers} ${dossiers.length === 1 ? "est complété" : "sont complétés"}. Les fichiers nouveaux s'y ajoutent, ceux du même nom sont remplacés par votre version, et rien n'y est supprimé.`,
+      }),
+      el("p", { class: "aide", texte: "Pour retirer aussi ce qui n'existe plus sur votre PC, utilisez plutôt « Synchroniser »." }),
+    );
+  }
+  if (fichiers.length) explications.push(el("p", { texte: `${nomFichiers} ${fichiers.length === 1 ? "sera remplacé" : "seront remplacés"} par votre version.` }));
+
   return confirmer(
-    doublons.length === 1 ? `« ${doublons[0].nom} » existe déjà ${ou}` : `${doublons.length} éléments existent déjà ${ou}`,
-    [
-      el("ul", { class: "liste-courte" }, doublons.slice(0, 50).map((e) => el("li", {}, el("span", { texte: e.nom }), el("span", { texte: e.dossier ? "dossier" : taille(e.taille) })))),
-      el("p", { texte: dossiers ? "Les fichiers de même nom sont remplacés ; les dossiers sont complétés, rien n'y est supprimé." : "Ils seront remplacés." }),
-    ],
-    { oui: "Remplacer" },
+    titre,
+    [el("ul", { class: "liste-courte" }, doublons.slice(0, 50).map((e) => el("li", {}, el("span", { texte: e.nom }), el("span", { texte: e.dossier ? "dossier" : taille(e.taille) })))), ...explications],
+    { oui },
   );
 }
 
@@ -1085,6 +1111,7 @@ async function scenarioEssai(s) {
   const attendre = (ms) => new Promise((ok) => setTimeout(ok, ms));
   if (s === "erreur-connexion") return montrerErreur("Nom ou mot de passe incorrect.");
   await attendre(400);
+  if (s === "dossier-existant") return confirmerRemplacement([{ nom: "mods", dossier: true }], "sur le serveur");
   const l = volets.local;
   const d = volets.distant;
   if (s === "file" || s === "selection") {
