@@ -61,7 +61,9 @@ async function installer(progression) {
   autoUpdater.on("download-progress", (p) => progression(p.transferred, p.total));
   await autoUpdater.downloadUpdate();
   // Installation silencieuse, puis relance du logiciel (isSilent, isForceRunAfter).
-  setImmediate(() => autoUpdater.quitAndInstall(true, true));
+  // L'interface affiche d'abord ce qui va se passer ; puis fermeture, fenêtre de progression de l'installateur
+  // (installateur « en un clic » : pas de question, une barre), et relance automatique.
+  setTimeout(() => autoUpdater.quitAndInstall(false, true), 3500);
 }
 
 // Chemin du bundle .app en cours d'exécution (…/Lost Island Fichiers.app/Contents/MacOS/Lost Island Fichiers).
@@ -125,7 +127,7 @@ async function installerMac(progression) {
     { mode: 0o755 },
   );
   spawn("/bin/sh", [script], { detached: true, stdio: "ignore" }).unref();
-  setImmediate(() => app.quit());
+  setTimeout(() => app.quit(), 3500);
 }
 
 module.exports = { verifier, installer, plusRecente };

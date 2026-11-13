@@ -1085,7 +1085,7 @@ async function proposerMaj() {
   const res = await li.majInstaller();
   fin();
   if (res.ok) {
-    texte.textContent = "Installation : le logiciel va redémarrer.";
+    texte.textContent = `Version ${v} téléchargée. Le logiciel va se fermer, une fenêtre d'installation va s'afficher, puis il se rouvrira tout seul.`;
     return;
   }
   majDialogue({ titre: "Mise à jour impossible", corps: [el("p", { class: "alerte", texte: res.erreur })], actions: [{ texte: "Fermer", defaut: true, agir: () => fermerDialogue() }] });

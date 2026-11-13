@@ -38,9 +38,11 @@
       "artifactName": "LostIslandFichiers-Setup.${ext}"
     },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "shortcutName": "Lost Island Fichiers"
+      "oneClick": true,
+      "perMachine": false,
+      "runAfterFinish": true,
+      "shortcutName": "Lost Island Fichiers",
+      "createDesktopShortcut": true
     },
     "mac": {
       "target": [
